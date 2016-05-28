@@ -1,4 +1,6 @@
 //lineshape.c
+//accounts for the split by random defoemation
+//the effect of energy shift not included
 //adapted for a particular zpl on 1190.1917 meV
 #include <stdio.h>      
 #include <math.h>      
@@ -13,7 +15,7 @@ double h(int n, double args[n]){
     double v1 = args[7];
     double v2 = args[8];
 	
-	double J = (1-x1)*(1-x2)*(1-x3)*(1-x4)/(1+v1*x1)/(1+v1*x1)/(1+v2*x2)/(1+v2*x2)/(1+v1*x3)/(1+v1*x3)/(1+v2*x4)/(1+v2*x4);
+    double J = (1-x1)*(1-x2)*(1-x3)*(1-x4)/(1+v1*x1)/(1+v1*x1)/(1+v2*x2)/(1+v2*x2)/(1+v1*x3)/(1+v1*x3)/(1+v2*x4)/(1+v2*x4);
     double delta = sqrt((x1+x2) * (x1+x2) + (x3+x4) * (x3+x4));
     double L1 = 1/((freq - 1190.1917+ delta)*(freq - 1190.1917+ delta) + G*G);
     double L2 = 1/((freq - 1190.1917- delta)*(freq - 1190.1917- delta) + G*G);
