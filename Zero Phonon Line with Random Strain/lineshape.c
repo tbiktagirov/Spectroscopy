@@ -1,4 +1,5 @@
 //lineshape.c
+//adapted for a particular zpl on 1190.1917 meV
 #include <stdio.h>      
 #include <math.h>      
 double h(int n, double args[n]){
