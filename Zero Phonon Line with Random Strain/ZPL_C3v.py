@@ -39,9 +39,9 @@ def get_spectrum(data, dlambda):
 def gen_freq():
    freq1 = np.arange(-1,1.1,0.1)
    freq = []
-   freq = [-3, -2.5, -2, -1.5]
+   freq = [-5, -4, -3, -2.5, -2, -1.5]
    freq = np.append(freq,freq1)
-   freq = np.append(freq,[1.5, 2, 2.5, 3])  + 1190.1917
+   freq = np.append(freq,[1.5, 2, 2.5, 3, 4, 5])  + 1190.1917
    return freq
 
    
