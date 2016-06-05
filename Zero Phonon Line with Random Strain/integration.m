@@ -79,4 +79,3 @@ function R = integration()
 	csvwrite(['sim_' file '.csv'], [freq',H'])
 	csvwrite(['exp_' file '.csv'], [freq1',y])
 	%R = H/max(H) - y/max(y);
-	
