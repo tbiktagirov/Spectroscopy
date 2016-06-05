@@ -1,11 +1,8 @@
-function R = integration(var)
+function H = integration()
 
-	delta = var(1);
-	gamma = var(2);
-	
 	file = 'E6P1_532'
-	%delta = 2.9e-1;
-	%gamma = 1.7e-4;	
+	delta = 2.9e-1;
+	gamma = 1.7e-4;	
 	
 	%file = 'E6P1_633'
 	%delta = 2.9e-1;
@@ -66,7 +63,7 @@ function R = integration(var)
 	
 	%Monte Carlo integration
 	N = 1e5
-    for i=1:size(freq,2)
+	for i=1:size(freq,2)
 		tmp = 0;
 		x=freq(i);
 		for j = 1:N
