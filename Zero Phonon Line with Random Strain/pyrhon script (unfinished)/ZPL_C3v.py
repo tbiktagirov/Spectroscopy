@@ -1,18 +1,3 @@
-"""
-ZPL_C3v (by TB): 
-
-The script simulates the zero phonon line for a center
-with C3v symmetry in the presence of electron-deformation
-interaction with a random strain field produced by point 
-defects in the host lattice.
-Based on [Malkin et al. PRB 2012].
-
-The lineshape is uploaded as a shared library.
-To be generated from lineshape.c file (e.g. with gcc):
-  $ gcc -shared -o lineshape.so lineshape.c
-   
-"""
-
 import numpy as np
 import ctypes
 import matplotlib.pyplot as plt
@@ -20,7 +5,7 @@ import matplotlib.pyplot as plt
 from scipy.integrate import nquad
 
 
-def get_spectrum(data, dlambda):
+def nm2mev(data, dlambda):
    spectrum = data
    spectrum[:,0] += dlambda
    wavelength = spectrum[:,0]
@@ -36,43 +21,39 @@ def get_spectrum(data, dlambda):
 
 
 
-def gen_freq():
+def gen_freq(xc):
    freq1 = np.arange(-1,1.1,0.1)
    freq = []
-   freq = [-5, -4, -3, -2.5, -2, -1.5]
+   freq = [-5, -4.5, -4, -3.5, -3, -2.5, -2.25, -2, -1.75, -1.5, -1.25]
    freq = np.append(freq,freq1)
-   freq = np.append(freq,[1.5, 2, 2.5, 3, 4, 5])  + 1190.1917
+   freq = np.append(freq,[1.25, 1.5, 1.75, 2, 2.25, 2.5, 3, 3.5, 4, 4.5, 5])
+   freq = freq  + xc
    return freq
 
    
    
-def integrate(freq,G,gamma,v1,v2):
+def integrate(freq,delta,gamma,v1,v2,xc):
    y = []
    for x in freq:
       print(x)
-      int = nquad(func, [[0, 1],[0, 1],[0, 1],[0, 1]], args=(x,G,gamma,v1,v2))
+      int = nquad(func, [[0, 1],[0, 1],[0, 1],[0, 1]], args=(x,delta,gamma,v1,v2,xc))
       y = np.append(y,int[0])
    print(freq.shape,y.shape)
    return y
 
 
 if __name__ == "__main__":
+
    print('loading data')
    filename = 'E6P1_532'
    data = np.genfromtxt(filename+'.csv', delimiter=',')
    dlambda = 1041.6893 
    #dlambda is needed if the spectrum has been translated during processing
-   spectrum = get_spectrum(data, dlambda)
+   spectrum = nm2mev(data, dlambda)
    
-   freq = gen_freq()
-   
-   print('loading dll')
-   lib = ctypes.CDLL('lineshape.so')
-   func = lib.h
-   func.restype = ctypes.c_double
-   func.argtypes = (ctypes.c_int, ctypes.c_double)
-
-
+   #Simulation parameters
+   xc = 1190.1917
+   freq = gen_freq(xc)
    #the numbers (in cm-1) are from Rogers Doherty 2015 New J Phys:
    B = -1.23
    C = -0.69
@@ -82,21 +63,26 @@ if __name__ == "__main__":
    #the following is from Davies 1979 J Phys C :
    v1 = (c11-c12)*B + c44*C #in meV
    v2 = np.sqrt(2)*(c11-c12)*B - c44*C/np.sqrt(2) #in meV
-
    #the fitted width parameters for E6P1_532 :
-   G = 2.8e-1
-   gamma = 2.35e-4
+   delta = 2.9e-1
+   gamma = 1.7e-4
    
+   
+   print('loading first dll')
+   lib = ctypes.CDLL('lineshape.so')
+   func = lib.h
+   func.restype = ctypes.c_double
+   func.argtypes = (ctypes.c_int, ctypes.c_double)
+
    print('calculating lineshape')
-   y = integrate(freq,G,gamma,v1,v2)
+   y = integrate(freq,delta,gamma,v1,v2,xc)
    
    output = np.column_stack((freq, y))
-   np.savetxt('simul'+filename+'.csv',output,delimiter=",")
+   np.savetxt('simul_'+filename+'.csv',output,delimiter=",")
 
    plt.plot(freq, y/max(y), color='r', label='sim')
    plt.hold('on')
    plt.plot(spectrum[:,0], spectrum[:,1]/max(spectrum[:,1]), color='b', label='exp')
-   plt.xlabel('Wavenumber, nm')
+   plt.xlabel('Energy, meV')
    plt.ylabel('Normalized intensity')
    plt.show()
-
