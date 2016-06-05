@@ -2,31 +2,31 @@ function R = integration()
 
 
 	file = 'E6P1_532'
-	G = 2.9e-1;
+	delta = 2.9e-1;
 	gamma = 1.7e-4;	
 	
 	%file = 'E6P1_633'
-	%G = 2.9e-1;
+	%delta = 2.9e-1;
 	%gamma = 2.1e-4;	
 	
 	%file = 'P_532'
-	%G = 3.1e-1;
+	%delta = 3.1e-1;
 	%gamma = 1.65e-4;
 
 	%file = 'P_633'
-	%G = 3.1e-1;
+	%delta = 3.1e-1;
 	%gamma = 2.0e-4;	
 	
 	%file = 'E6P2_532'
-	%G = 3.5e-1;
+	%delta = 3.5e-1;
 	%gamma = 2.4e-4;
 	
 	%file = 'E6P2_633'
-	%G = 3.7e-1;
+	%delta = 3.7e-1;
 	%gamma = 2.9e-4;		
 
 	%file = 'E6_as_grown'
-	%G = 0.18;
+	%delta = 0.18;
 	%gamma = 1e-6;	
 
 	
@@ -70,7 +70,7 @@ function R = integration()
 			t2 = rand(1,1);
 			t3 = rand(1,1);
 			t4 = rand(1,1);
-			tmp = tmp + (lineshape(t1, t2, t3, t4, x, x0, v1, v2, G, gamma));
+			tmp = tmp + (lineshape(t1, t2, t3, t4, x, x0, v1, v2, delta, gamma));
 		end
 		H(i)=tmp/N;
 	end
@@ -79,3 +79,4 @@ function R = integration()
 	csvwrite(['sim_' file '.csv'], [freq',H'])
 	csvwrite(['exp_' file '.csv'], [freq1',y])
 	%R = H/max(H) - y/max(y);
+	
