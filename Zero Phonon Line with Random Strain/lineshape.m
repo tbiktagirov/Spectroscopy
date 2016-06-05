@@ -1,4 +1,4 @@
-function h = lineshape(t1,t2,t3,t4, x, x0, v1, v2, delta, gamma)
+function h = lineshape(t1,t2,t3,t4, x, x0, v1, v2, G, gamma)
 	%x1 = t1/(1-t1);
 	%x2 = t2/(1-t2);
 	%x3 = t3/(1-t3);
@@ -15,7 +15,7 @@ function h = lineshape(t1,t2,t3,t4, x, x0, v1, v2, delta, gamma)
 
 	
 	delta = sqrt( (e1+e2)*(e1+e2) + (e3+e4)*(e3+e4) );
-	L1 = exp(-(x - x0 + delta)^2/2/delta/delta);
-	L2 = exp(-(x - x0 - delta)^2/2/delta/delta);
+	L1 = exp(-(x - x0 + delta)^2/2/G/G);
+	L2 = exp(-(x - x0 - delta)^2/2/G/G);
 	h = (L1+L2)/(e1*e1/v1/v1 + e2*e2/v2/v2 + e3*e3/v1/v1 + e4*e4/v2/v2 + gamma^2)^(2.5)*J; 
 

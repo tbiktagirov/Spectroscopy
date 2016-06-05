@@ -1,38 +1,36 @@
-function R = integration(var)
+function R = integration()
 
-	delta = var(1);
-	gamma = var(2);
-	
+
 	file = 'E6P1_532'
-	%delta = 2.9e-1;
-	%gamma = 1.7e-4;	
+	G = 2.9e-1;
+	gamma = 1.7e-4;	
 	
 	%file = 'E6P1_633'
-	%delta = 2.9e-1;
+	%G = 2.9e-1;
 	%gamma = 2.1e-4;	
 	
 	%file = 'P_532'
-	%delta = 3.1e-1;
+	%G = 3.1e-1;
 	%gamma = 1.65e-4;
 
 	%file = 'P_633'
-	%delta = 3.1e-1;
+	%G = 3.1e-1;
 	%gamma = 2.0e-4;	
 	
 	%file = 'E6P2_532'
-	%delta = 3.5e-1;
+	%G = 3.5e-1;
 	%gamma = 2.4e-4;
 	
 	%file = 'E6P2_633'
-	%delta = 3.7e-1;
+	%G = 3.7e-1;
 	%gamma = 2.9e-4;		
 
 	%file = 'E6_as_grown'
-	%delta = 0.18;
+	%G = 0.18;
 	%gamma = 1e-6;	
 
 	
-	
+
 	%transform experimental data
 	data=load([file '.csv']);
 	data(:,1) = data(:,1) + 1041.6893;
@@ -47,7 +45,6 @@ function R = integration(var)
 	freq1 = freq * 1.23981e-4 * 1e3; %meV
 	
 	
-	
 	%interaction parameters
 	B = -1.23;
 	C = -0.69;
@@ -59,7 +56,6 @@ function R = integration(var)
 	v2 = sqrt(2)*(c11-c12)*B - c44*C/sqrt(2); %in meV
 
 
-	
 	x0 = 1190.15;
 	freq=linspace(-4,4,61)+x0;
 	H=zeros(size(freq,1),1);
@@ -74,7 +70,7 @@ function R = integration(var)
 			t2 = rand(1,1);
 			t3 = rand(1,1);
 			t4 = rand(1,1);
-			tmp = tmp + (lineshape(t1, t2, t3, t4, x, x0, v1, v2, delta, gamma));
+			tmp = tmp + (lineshape(t1, t2, t3, t4, x, x0, v1, v2, G, gamma));
 		end
 		H(i)=tmp/N;
 	end
