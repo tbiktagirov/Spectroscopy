@@ -62,7 +62,7 @@ function R = integration()
 	
 	%Monte Carlo integration
 	N = 1e5
-    for i=1:size(freq,2)
+	for i=1:size(freq,2)
 		tmp = 0;
 		x=freq(i);
 		for j = 1:N
