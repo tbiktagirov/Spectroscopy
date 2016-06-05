@@ -1,7 +1,7 @@
 //lineshape.c
-//accounts for the split by random defoemation
-//the effect of energy shift not included
-//adapted for a particular zpl on 1190.1917 meV
+//Accounts for the energy split by random strain
+//The effect of energy shift not included
+
 #include <stdio.h>      
 #include <math.h>      
 double h(int n, double args[n]){
