@@ -48,19 +48,20 @@ if __name__ == "__main__":
    filename = 'E6P1_532'
    data = np.genfromtxt(filename+'.csv', delimiter=',')
    dlambda = 1041.6893 
-   #dlambda is needed if the spectrum has been translated during processing
+   #dlambda is needed if the spectrum has been translated during preprocessing
+   #otherwise, put dlambda = 0
    spectrum = nm2mev(data, dlambda)
    
    #Simulation parameters
    xc = 1190.1917
    freq = gen_freq(xc)
-   #the numbers (in cm-1) are from Rogers Doherty 2015 New J Phys:
+   #the numbers are from Rogers Doherty 2015 New J Phys:
    B = -1.23
    C = -0.69
    c11 = 1076
    c12 = 125
    c44 = 576
-   #the following is from Davies 1979 J Phys C :
+   #the following is consistent with the notations in Davies 1979 J Phys C :
    v1 = (c11-c12)*B + c44*C #in meV
    v2 = np.sqrt(2)*(c11-c12)*B - c44*C/np.sqrt(2) #in meV
    #the fitted width parameters for E6P1_532 :
