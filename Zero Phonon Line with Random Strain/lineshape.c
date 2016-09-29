@@ -21,7 +21,7 @@ double h(int n, double args[n]){
     double E = sqrt((x1+x2) * (x1+x2) + (x3+x4) * (x3+x4));
     double L1 = exp(-(freq - xc + E)*(freq - xc + E)/2/(delta*delta));
     double L2 = exp(-(freq - xc - E)*(freq - xc - E)/2/(delta*delta));
-    double distr = pow(1/(x1*x1/v1/v1+x2*x2/v2/v2+x3*x3/v1/v1+x4*x4/v2/v2+gamma*gamma),2.5);
+    double distr = pow(1/(x1*x1/v1/v1+x2*x2/v1/v1+x3*x3/v2/v2+x4*x4/v2/v2+gamma*gamma),2.5);
     double h = (L1+L2)*distr*J;
     return h;
 }
