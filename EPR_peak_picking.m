@@ -1,8 +1,7 @@
 % 
 clear, clf, clc
 
-%%% ! It is based on some internal Matlab functions. Could not work with some Matlab versions
-
+% Based on internal Easyspin and Matlab functions. May not work with some Matlab versions.
 
 %%%-----------------------------------------------------------------------%%%
 %%% OPTIONS
@@ -36,12 +35,32 @@ numfiles = size(listing,1);
 
 field = 1;
 disp('The filename format is expected to be "field1_field2_field3_... .spc" ')
-disp('Example of a current input:  ')
+disp('Example of the current input:  ')
 disp(listing(1).name)
 disp('')
 disp('Which field contains the information about the rotation angle?'  )
 field = input('type: 1 or 2 or 3 ...:    '  )
 
+% Sorting files with respect to the selected field value
+tmp = [];
+for i = 1:numfiles 
+    str = strsplit(listing(i).name(1:end-4), '_');
+    tmp(i) = str2double(str(field));
+end
+for i = 2:numfiles 
+    x = tmp(i);
+    f = listing(i);
+    j = i-1;
+    while j >= 1 & tmp(j) > x
+        tmp(j+1) = tmp(j);
+        listing(j+1) = listing(j);
+        j = j-1;
+    end
+    tmp(j+1) = x;
+    listing(j+1) = f;
+end
+tmp = [];
+    
 
 % Trying to upload the parameters from file, if they were previously saved
 parupload = 0;
@@ -110,13 +129,14 @@ for ispc = 1:numfiles
         
         % Showing the result and changing the parameters
         plot(x,y)
+        title(ifilename,'interpreter','none')
         for i = 1:max(size(loc))
             line([loc(i) loc(i)], [max(y) min(y)], 'LineStyle', '--', 'Color', 'r')
         end
     
 
         prompt = {'Minimum linewidth (G):','Maximum linewidth (G):', 'Minimum height (a.u.):', 'Smoothing window (points):', 'Do you like the results? (y/n)'};
-        dlg_title = 'Change criteria';
+        dlg_title = ifilename;
         num_lines = 1;
         defaultans = {num2str(Wmin),num2str(Wmax),num2str(HeightMin),num2str(smtwindow),'y'};
         answer = inputdlg(prompt,dlg_title,num_lines,defaultans);
@@ -135,6 +155,10 @@ for ispc = 1:numfiles
     
     % Adding peak positions to the output
     output(ispc,2:size(loc,2)+1) = loc;
+    
+    
+    % Creating a line in the list of processed files
+    filelist{ispc,:} = [num2str(ispc), '   ', num2str(output(ispc,1)), '   ', ifilename];
 end
 
 
@@ -143,9 +167,10 @@ save ang_dep_peak.dat output -ascii
 save parameters.fitpar parameters -ascii
 
 
-
-
-
-
-
+fileID = fopen('filelist.dat','w');
+format = '%s\r\n'
+for i = 1:size(filelist,1);
+    fprintf(fileID,format,filelist{i,:}); 
+end
+fclose(fileID);
 
